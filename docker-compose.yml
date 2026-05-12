@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  victim-web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.victim
+    container_name: crypto_victim
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app  
+    networks:
+      - crypto-net
+    environment:
+      - FLASK_ENV=development
+
+  attacker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.attacker
+    container_name: crypto_attacker
+    volumes:
+      - .:/workspace 
+    depends_on:
+      - victim-web
+    networks:
+      - crypto-net
+
+networks:
+  crypto-net:
+    driver: bridge

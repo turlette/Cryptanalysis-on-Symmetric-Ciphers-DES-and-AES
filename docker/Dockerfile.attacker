@@ -1,0 +1,13 @@
+﻿FROM python:3.10-slim
+
+WORKDIR /app
+
+# Cài đặt thư viện
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Mở port cho Flask API
+EXPOSE 5000
+
+# Chạy app Padding Oracle
+CMD ["python", "experiments/padding_oracle/vulnerable_app.py"]
