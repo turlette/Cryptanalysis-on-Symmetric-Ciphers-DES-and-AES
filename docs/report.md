@@ -30,3 +30,20 @@ Qua 12 tuần thực hiện đồ án, chúng em rút ra kết luận cốt lõi
 > **"Sự an toàn của một hệ thống mật mã không bao giờ chỉ nằm ở công thức toán học của nó, mà nằm ở toàn bộ quy trình cấu hình, lập trình và triển khai phần cứng."**
 
 Mọi sơ suất nhỏ trong lập trình (báo lỗi sai, dùng lại biến ngẫu nhiên, không xử lý nhiễu điện năng) đều mở ra cánh cửa cho kẻ tấn công (Hackers) vượt qua bức tường thành AES tưởng chừng như bất khả xâm phạm.
+
+## 4. Tài liệu Tham khảo (Literature Review)
+
+### Các công trình nghiên cứu (Papers)
+1. **Biham, E., & Shamir, A. (1991).** *Differential Cryptanalysis of DES-like Cryptosystems*. Journal of Cryptology. (Phân tích mã thám vi phân trên cipher DES).
+2. **Matsui, M. (1993).** *Linear Cryptanalysis Method for DES Cipher*. EUROCRYPT '93. (Nền tảng của mã thám tuyến tính).
+3. **Bhargavan, K., & Leurent, G. (2016).** *On the Practical (In-)Security of 64-bit Block Ciphers: Collision Attacks on HTTP over TLS and OpenVPN (Sweet32)*. ACM CCS. (Khai thác lỗ hổng kích thước block 64-bit trên 3DES).
+4. **Vaudenay, S. (2002).** *Security Flaws Induced by CBC Padding — Applications to SSL, IPSEC, WTLS...*. EUROCRYPT '02. (Bài báo nền tảng khởi xướng tấn công Padding Oracle).
+5. **Bernstein, D. J. (2005).** *Cache-timing attacks on AES*. (Phát hiện lỗ hổng rò rỉ qua thời gian phản hồi bộ đệm Cache trên các hệ thống dùng Table-based AES).
+6. **Al Fardan, N. J., & Paterson, K. G. (2013).** *Lucky Thirteen: Breaking the TLS and DTLS Record Protocols*. IEEE S&P. (Khai thác điểm yếu Timing attack trên giao thức TLS dùng mã hóa CBC).
+7. **Böck, H., Zauner, A., Devigne, S., et al. (2016).** *Nonce-Disrespecting Adversaries: Practical Forgery Attacks on GCM in TLS*. WOOT '16. (Phân tích hệ quả thảm khốc của việc tái sử dụng Nonce trong chế độ AES-GCM).
+
+### Công cụ và Mã nguồn (Tools & Frameworks)
+1. **OpenSSL:** Thư viện mật mã mã nguồn mở tiêu chuẩn quốc tế, được dùng làm mẫu tham chiếu cho các bản vá lỗi (Padding Oracle Mitigation) và kiến trúc Constant-Time AES.
+2. **Hashcat:** Công cụ phục hồi mật khẩu và tấn công vét cạn (Brute-force) hàng đầu thế giới, khai thác tối đa sức mạnh tính toán song song của GPU để thử khóa DES.
+3. **PadBuster:** Công cụ tự động hóa việc khai thác lỗ hổng Padding Oracle trên các giao thức Web/API thực tế.
+4. **ChipWhisperer:** Hệ sinh thái phần cứng và phần mềm mã nguồn mở dành riêng cho việc nghiên cứu tấn công Kênh Kề (Power Analysis/Fault Injection).
