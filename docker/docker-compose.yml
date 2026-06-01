@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  crypto-lab-runner:
+    build: 
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: cryptanalysis_lab
+    volumes:
+      # Mount thư mục data ra ngoài máy host để giữ lại logs sau khi container chạy xong
+      - ../data:/app/data

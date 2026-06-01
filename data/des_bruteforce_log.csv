@@ -1,0 +1,3 @@
+Timestamp,Plaintext,Original Key (hex),Found Key (hex),Difficulty (bytes),Attempts,Time (s),Speed (keys/s)
+2026-06-01 15:08:29,Top Secret 2026!,9905aed8ec39370a,9905aed8ec39360a,2,13835,0.1832,75508.49
+2026-06-01 16:13:15,Top Secret 2026!,20133e59097803df,20133e59097802de,2,735,0.0096,76388.57
