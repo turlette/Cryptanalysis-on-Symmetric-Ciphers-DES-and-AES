@@ -1,74 +1,96 @@
-# Literature Summary
+# Literature Summary — Cryptanalysis on Symmetric Ciphers (DES & AES)
 
-## 1. Differential Cryptanalysis (Biham & Shamir, 1993)
+## Paper 1: Differential Cryptanalysis of DES
 
-- **Key idea**: Phương pháp thám mã sai phân (differential cryptanalysis) phân tích cặp bản rõ và bản mã với các "difference" (sự khác biệt) được kiểm soát. Bằng cách theo dõi sự lan truyền của difference qua các vòng mã hóa, có thể xác định key với xác suất cao hơn brute-force [citation:1].
+- **Title:** Differential Cryptanalysis of the Data Encryption Standard
+- **Authors:** Eli Biham, Adi Shamir
+- **Year:** 1993
+- **Source:** Springer, DOI: 10.1007/978-1-4613-9314-6
+- **Link:** https://www.semanticscholar.org/paper/Differential-Cryptanalysis-of-the-Data-Encryption-Biham-Shamir/0cfd5a7c6610e0eff2d277b419808edb32d93b78
 
-- **Contribution**: 
-  - Là attack thành công đầu tiên phá vỡ DES 16 vòng nhanh hơn exhaustive search
-  - Giới thiệu khái niệm characteristic, signal-to-noise ratio, và structures
-  - Được áp dụng thành công cho FEAL, Khafre, REDOC-II, LOKI, Lucifer và nhiều hash functions [citation:7]
+### Key Contributions
+- Giới thiệu **differential cryptanalysis** — phân tích cặp bản rõ có XOR difference được kiểm soát, theo dõi cách difference lan truyền qua các vòng S-box để suy ra key bits với xác suất cao hơn brute-force
+- Là attack đầu tiên phá vỡ **full 16-round DES** nhanh hơn exhaustive search (~2⁴⁷ chosen plaintexts), đồng thời giới thiệu các khái niệm nền tảng: *characteristic*, *signal-to-noise ratio*, *structures*
+- Được áp dụng thành công cho nhiều cipher khác: FEAL, Khafre, REDOC-II, LOKI, Lucifer, và một số hash functions — chứng minh đây là phương pháp tổng quát, không chỉ dành riêng cho DES
 
-- **Relevance to our work**: Nền tảng cho nhiều side-channel attacks hiện đại. Hiểu differential cryptanalysis giúp phân tích điểm yếu của các cipher khác.
+### Relevance to Project
+Là nền tảng lý thuyết trực tiếp cho `experiments/exp_differential_cryptanalysis/`. Project implement lại đúng attack này trên Mini-DES, nên hiểu rõ paper là bắt buộc. Differential cryptanalysis cũng là tiền đề để hiểu các side-channel attacks hiện đại.
 
-- **Notes**: 
-  - Book chính thức: "Differential Cryptanalysis of the Data Encryption Standard" (Springer, 1993)
-  - DOI: 10.1007/978-1-4613-9314-6 [citation:7]
+---
 
+## Paper 2: Linear Cryptanalysis of DES
 
-## 2. Linear Cryptanalysis (Matsui, 1994)
+- **Title:** The First Experimental Cryptanalysis of the Data Encryption Standard
+- **Authors:** Mitsuru Matsui
+- **Year:** 1994
+- **Source:** CRYPTO 1994 (version lý thuyết: "Linear Cryptanalysis Method for DES Cipher", EUROCRYPT 1993)
+- **Link:** https://www.semanticscholar.org/paper/The-First-Experimental-Cryptanalysis-of-the-Data-Matsui/56606d725cb6d553862c98311765dd2d77e9603b
 
-- **Key idea**: Phương pháp thám mã tuyến tính (linear cryptanalysis) tìm xấp xỉ tuyến tính giữa bản rõ, bản mã và key. Sử dụng các linear approximation của S-boxes để khôi phục key bits [citation:2].
+### Key Contributions
+- Giới thiệu **linear cryptanalysis** — tìm xấp xỉ tuyến tính (linear approximation) giữa bản rõ, bản mã và key thông qua bias của S-boxes, cho phép khôi phục key bits bằng thống kê
+- Là known-plaintext attack đầu tiên phá thực nghiệm DES đầy đủ 56-bit key (~2⁴³ known plaintexts), thực hiện trên 12 máy tính trong 50 ngày (40 ngày sinh data + 10 ngày phân tích)
+- Đặt nền tảng cho tiêu chí thiết kế S-box: **non-linearity cao** là yêu cầu bắt buộc — AES S-box được thiết kế với non-linearity tối ưu để chống lại attack này
 
-- **Contribution**: 
-  - Attack DES 16 vòng thành công với 2^43 known plaintexts (trong thực nghiệm)
-  - Thực hiện trên 12 máy tính trong 50 ngày: 40 ngày sinh plaintexts + 10 ngày tìm key [citation:8]
-  - Đạt toàn bộ 56 bits key
+### Relevance to Project
+Song song với differential cryptanalysis ở cấp độ cấu trúc. Cả hai cùng nhau tạo nên nền tảng của *classical cryptanalysis* và là lý do DES bị coi là không an toàn. Hiểu paper này giúp phân tích điểm yếu của S-box trong Mini-DES và so sánh với AES.
 
-- **Relevance to our work**: Song song với differential cryptanalysis ở cấp độ cấu trúc [citation:6]. Cả hai đều là nền tảng cho modern cryptanalysis.
+---
 
-- **Notes**: 
-  - Paper gốc: "The First Experimental Cryptanalysis of the Data Encryption Standard" (Crypto 1994)
-  - Có thể tìm phiên bản conference từ Eurocrypt'93: "Linear Cryptanalysis Method for DES Cipher"
+## Paper 3: Padding Oracle Attack (CBC Mode)
 
+- **Title:** Security Flaws Induced by CBC Padding — Applications to SSL, IPSEC, WTLS...
+- **Authors:** Serge Vaudenay
+- **Year:** 2002
+- **Source:** EUROCRYPT 2002
+- **Link:** https://www.usenix.org/legacy/event/woot10/tech/full_papers/Rizzo.pdf *(practical extension: Rizzo & Duong, WOOT 2010)*
 
-## 3. Padding Oracle Attack (Vaudenay, 2002)
+### Key Contributions
+- Phát hiện **padding oracle vulnerability** trong CBC mode với PKCS#5 padding: nếu server tiết lộ thông tin "padding đúng/sai" (dù chỉ qua error message hoặc timing), attacker có thể decrypt hoàn toàn ciphertext mà không cần key
+- Chỉ ra rằng thông tin tưởng chừng vô hại (padding error) tạo thành **adaptive chosen-ciphertext oracle**, đủ để phá vỡ confidentiality của toàn bộ session
+- Được mở rộng thành các attack thực tế trên TLS/SSL, IPSEC, WTLS; sau đó là **POODLE attack** (2014) trên SSL 3.0 — ảnh hưởng trực tiếp đến hàng triệu web server
 
-- **Key idea**: Tấn công dựa trên padding oracle - một hệ thống cho biết padding của ciphertext có hợp lệ hay không. Từ thông tin này (side channel), attacker có thể decrypt dữ liệu mà không cần key [citation:3].
+### Relevance to Project
+Là attack được implement trực tiếp trong `experiments/exp_padding_oracle/`. Đây là ví dụ kinh điển về **side-channel attack từ error messages** — cho thấy implementation-level flaws nguy hiểm không kém mathematical weaknesses.
 
-- **Contribution**:
-  - Phát hiện vulnerability trong CBC-mode encryption với PKCS#5 padding
-  - Chỉ ra rằng chỉ cần oracle trả lời "padding correct/incorrect" là đủ để phá vỡ bảo mật
-  - Được mở rộng thành POODLE attack trên SSL 3.0 (2014) [citation:9]
+---
 
-- **Relevance to our work**: Là ví dụ kinh điển về side-channel attack từ error messages. Cho thấy thông tin tưởng chừng vô hại (padding error) có thể bị khai thác.
+## Paper 4: Cache Timing Attack on AES
 
-- **Notes**: 
-  - Paper gốc: "Security of Padding Schemes in CBC-Mode Encryption" (Eurocrypt 2002)
-  - Ứng dụng thực tế: tấn công TLS/SSL, web frameworks [citation:3]
-  - Xem thêm: Rizzo & Duong (2010) - "Practical padding oracle attacks" (WOOT)
+- **Title:** Cache-timing attacks on AES
+- **Authors:** Daniel J. Bernstein
+- **Year:** 2005
+- **Source:** Technical Report, cr.yp.to
+- **Link:** http://cr.yp.to/antiforgery/cachetiming-20050414.pdf
 
+### Key Contributions
+- Chứng minh AES implementation tiêu chuẩn (dùng T-table lookup) bị rò rỉ thông tin key qua **CPU cache timing**: cache hit (~4 cycles) vs cache miss (~200 cycles) tạo ra timing signature phụ thuộc vào key
+- Thực hiện remote key recovery chỉ từ timing measurements qua network (~2²⁸ measurements) — không cần physical access, chứng minh đây là **practical remote attack**
+- Chỉ ra NIST đã bỏ qua vấn đề này khi chọn AES, và đề xuất yêu cầu **constant-time implementation** như tiêu chuẩn cho cryptographic code
 
-## 4. Cache Timing Attack (Bernstein, 2005)
+### Relevance to Project
+Minh họa quan trọng rằng ngay cả cipher toán học mạnh như AES cũng có thể bị phá qua implementation. Khác với differential/linear (tấn công toán học), cache timing tấn công hardware layer — mở rộng threat model của project sang side-channel attacks thực tế.
 
-- **Key idea**: Tận dụng sự khác biệt thời gian truy cập cache (cache hit ~ vài chu kỳ, cache miss ~ hàng trăm chu kỳ). Khi AES implementation truy cập S-box, cache misses sẽ leak thông tin về key [citation:4].
+---
 
-- **Contribution**:
-  - Chứng minh có thể khôi phục AES key từ timing measurements
-  - Chỉ ra NIST đã bỏ qua vấn đề này trong quá trình chọn AES
-  - Đề xuất hướng giải quyết cho CPU designers [citation:10]
+## So sánh 4 Phương pháp
 
-- **Relevance to our work**: Ví dụ quan trọng về hardware side-channel attack. Khác với các attack toán học (differential/linear), attack này khai thác implementation thực tế.
+| Tiêu chí | Differential (1993) | Linear (1994) | Padding Oracle (2002) | Cache Timing (2005) |
+|----------|--------------------|--------------|-----------------------|---------------------|
+| **Loại attack** | Chosen-plaintext | Known-plaintext | Chosen-ciphertext | Side-channel (timing) |
+| **Target** | DES S-box math | DES S-box bias | CBC padding impl | AES T-table impl |
+| **Điều kiện** | Cần chosen plaintexts | Cần lượng lớn data | Cần padding oracle | Cần timing measurements |
+| **Độ phức tạp** | ~2⁴⁷ | ~2⁴³ | O(n·256) queries | ~2²⁸ measurements |
+| **Layer tấn công** | Mathematical | Mathematical | Protocol/Impl | Hardware/Impl |
 
-- **Notes**: 
-  - PDF trực tiếp: http://cr.yp.to/antiforgery/cachetiming-20050414.pdf [citation:4]
-  - Có thể thực thi từ xa qua network (remote timing attack)
-  - Đặt ra yêu cầu về constant-time implementations cho cryptographic code
+---
 
+## Reference Implementations
 
-## Next steps
-- [x] Tìm kiếm 4 key papers
-- [ ] Đọc chi tiết từng paper (ưu tiên abstract + introduction + kết luận trước)
-- [ ] Điền nội dung chi tiết hơn vào các mục trên
-- [ ] So sánh chéo 4 phương pháp: điểm mạnh, điểm yếu, điều kiện tấn công
-- [ ] Bổ sung các paper liên quan (mở rộng từ mỗi hướng)
+| # | Project | Link | Liên quan đến |
+|---|---------|------|--------------|
+| 1 | GurbSingh/Differential-Cryptanalysis | https://github.com/GurbSingh/Differential-Cryptanalysis | Paper 1 — Differential |
+| 2 | mpgn/Padding-oracle-attack | https://github.com/mpgn/Padding-oracle-attack | Paper 3 — Padding Oracle |
+| 3 | RodoVerduzco/Mini-DES | https://github.com/RodoVerduzco/Mini-DES | Base implementation cho Mini-DES |
+| 4 | bozhu/AES-Python | https://github.com/bozhu/AES-Python | Paper 4 — AES impl reference |
+
+---
