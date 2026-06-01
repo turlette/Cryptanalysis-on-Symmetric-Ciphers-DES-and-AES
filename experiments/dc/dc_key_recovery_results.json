@@ -1,0 +1,33 @@
+{
+  "n_pairs": 2048,
+  "bias_found": true,
+  "most_likely_delta": "0x467A",
+  "frequency": 2,
+  "top3_delta_out": [
+    {
+      "delta": "0x467A",
+      "count": 2,
+      "prob": 0.000977,
+      "vs_uniform": 64.0
+    },
+    {
+      "delta": "0x6283",
+      "count": 2,
+      "prob": 0.000977,
+      "vs_uniform": 64.0
+    },
+    {
+      "delta": "0x9ABF",
+      "count": 2,
+      "prob": 0.000977,
+      "vs_uniform": 64.0
+    }
+  ],
+  "recovered_subkey_k7": "0x00",
+  "true_subkey_k7": "0x01",
+  "subkey_correct": false,
+  "key_bits_identified": 0,
+  "full_key_recovered": false,
+  "recovered_key": null,
+  "effort_to_full_recovery": "brute_force_remaining_bits_with_k7_hint"
+}
