@@ -1,0 +1,10 @@
+.git
+venv/
+env/
+__pycache__/
+*.docx
+*.pdf
+*.xlsx
+.vscode/
+data/
+plots/
