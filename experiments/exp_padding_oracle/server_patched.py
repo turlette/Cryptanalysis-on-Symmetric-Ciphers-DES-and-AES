@@ -7,7 +7,8 @@ import time
 app = Flask(__name__)
 
 SECRET_KEY = os.urandom(16)
-SECRET_MESSAGE = "TopSecret: This is a patched confidential message!"
+# Plaintext dài 32 bytes (vừa đúng 2 blocks). Attacker sẽ cần khoảng ~4000 requests để giải mã.
+SECRET_MESSAGE = "TopSecret: Padding Oracle Lab!!!"
 
 @app.route('/encrypt', methods=['GET'])
 def encrypt_message():

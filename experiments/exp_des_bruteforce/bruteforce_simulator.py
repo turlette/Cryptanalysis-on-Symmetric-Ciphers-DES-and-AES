@@ -49,7 +49,7 @@ def brute_force(ciphertext, known_prefix, difficulty_bytes, expected_plaintext):
 
 def main():
     # 1. Configuration
-    difficulty_bytes = 2 # Number of bytes to brute-force (2 bytes = 65,536 combinations)
+    difficulty_bytes = 3 # Number of bytes to brute-force (3 bytes = 2^(3*8) combinations)
     plaintext = "Top Secret 2026!"
     
     # 2. Setup targets

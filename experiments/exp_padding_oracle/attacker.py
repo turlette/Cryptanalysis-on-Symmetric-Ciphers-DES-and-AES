@@ -6,6 +6,11 @@ import sys
 
 SERVER_URL = "http://127.0.0.1:5000"
 
+# BẬT/TẮT GIẢ LẬP ĐỘ TRỄ MẠNG (Simulate WAN Latency)
+# Đặt thành True: Mỗi request sẽ bị delay thêm 0.44s. 
+# Kết quả: 1 block 16-byte sẽ tốn ~15 phút để bẻ khóa (giống hệt thực tế mạng Internet).
+SIMULATE_WAN_LATENCY = True 
+
 def get_ciphertext():
     """Lấy ciphertext mẫu từ server để tiến hành giải mã."""
     print(f"[*] Fetching ciphertext from {SERVER_URL}/encrypt...")
@@ -25,6 +30,10 @@ def check_padding(ciphertext_bytes):
     Trả về True nếu Padding HỢP LỆ (Không có lỗi 500 Invalid Padding).
     Trả về False nếu Padding KHÔNG HỢP LỆ (Server ném lỗi 500 Invalid Padding).
     """
+    if SIMULATE_WAN_LATENCY:
+        # Giả lập độ trễ mạng Internet (~440ms / request)
+        time.sleep(0.44)
+        
     payload = ciphertext_bytes.hex()
     resp = requests.get(f"{SERVER_URL}/decrypt/{payload}")
     
